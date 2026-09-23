@@ -1,20 +1,39 @@
+# Python
 __pycache__/
 *.pyc
+*.pyo
 
-.env
-
+# Entornos virtuales
+.venv/
 venv/
 
-.airflow/
+# Variables de entorno
+.env
 
+# Airflow
+airflow/logs/
+airflow/__pycache__/
+
+# Logs
 logs/
-
-*.db
-
-.idea/
-
-.vscode/
-
 *.log
 
+# Bases de datos locales
+*.db
+
+# MLflow
+mlruns/
+
+# Datos generados
+raw/
+
+# Modelos generados
+ml/models/
+ml/reports/
+
+# IDE
+.idea/
+.vscode/
+
+# Modelos antiguos
 models/*.pkl
