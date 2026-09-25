@@ -1,0 +1,68 @@
+version: 2
+
+models:
+
+  - name: stg_customers
+    description: "Datos de clientes provenientes de la capa staging."
+    columns:
+      - name: customer_id
+        description: "Identificador único del cliente."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: signup_date
+        description: "Fecha de registro del cliente."
+        data_tests:
+          - not_null
+
+  - name: stg_products
+    description: "Catálogo de productos proveniente de la capa staging."
+    columns:
+      - name: product_id
+        description: "Identificador único del producto."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: price
+        description: "Precio del producto."
+        data_tests:
+          - not_null
+
+  - name: stg_sales
+    description: "Ventas provenientes de la capa staging."
+    columns:
+      - name: sale_id
+        description: "Identificador único de la venta."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Cliente asociado a la venta."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: product_id
+        description: "Producto asociado a la venta."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: product_id
+
+      - name: quantity
+        description: "Cantidad de productos vendidos."
+        data_tests:
+          - not_null
+
+      - name: unit_price
+        description: "Precio unitario de la venta."
+        data_tests:
+          - not_null

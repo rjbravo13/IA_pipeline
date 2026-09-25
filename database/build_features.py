@@ -5,10 +5,13 @@ import os
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "port": 5432,
-    "database": "retaildb",
-    "user": "retail_user",
-    "password": "retail_password",
+    "database": os.getenv("POSTGRES_DB", "retaildb"),
+    "user": os.getenv("POSTGRES_USER", "retail_user"),
+    "password": os.getenv("POSTGRES_PASSWORD", "retail_password"),
 }
+
+
+DBT_CUSTOMER_360 = "public_retail_dbt_mart.customer_360"
 
 
 def build_features():
@@ -23,13 +26,13 @@ def build_features():
             DROP TABLE IF EXISTS retail_mart.customer_features;
         """)
 
-        cursor.execute("""
+        cursor.execute(f"""
             CREATE TABLE retail_mart.customer_features AS
 
             WITH reference_date AS (
                 SELECT
                     MAX(last_purchase_date)::date AS max_purchase_date
-                FROM retail_mart.customer_360
+                FROM {DBT_CUSTOMER_360}
             )
 
             SELECT
@@ -57,7 +60,7 @@ def build_features():
                     ELSE 0
                 END AS at_risk
 
-            FROM retail_mart.customer_360 c
+            FROM {DBT_CUSTOMER_360} c
 
             CROSS JOIN reference_date r;
         """)

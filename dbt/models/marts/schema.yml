@@ -1,0 +1,41 @@
+version: 2
+
+models:
+
+  - name: customer_360
+    description: "Vista 360 de clientes construida a partir de ventas, clientes y productos."
+
+    columns:
+
+      - name: customer_id
+        description: "Identificador único del cliente."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: city
+        description: "Ciudad del cliente."
+
+      - name: segment
+        description: "Segmento del cliente."
+
+      - name: signup_date
+        description: "Fecha de registro del cliente."
+
+      - name: total_purchases
+        description: "Cantidad total de compras realizadas."
+
+      - name: total_quantity
+        description: "Cantidad total de unidades compradas."
+
+      - name: total_spent
+        description: "Monto total gastado."
+
+      - name: average_ticket
+        description: "Valor promedio por compra."
+
+      - name: last_purchase_date
+        description: "Fecha de la última compra."
+
+      - name: unique_products
+        description: "Cantidad de productos diferentes comprados."

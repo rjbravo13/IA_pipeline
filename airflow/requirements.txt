@@ -6,3 +6,5 @@ psycopg2-binary
 scikit-learn
 joblib
 mlflow
+dbt-core==1.12.5
+dbt-postgres==1.11.0

@@ -31,9 +31,19 @@ raw/
 ml/models/
 ml/reports/
 
+# dbt
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml
+
 # IDE
 .idea/
 .vscode/
 
 # Modelos antiguos
 models/*.pkl
+
+# Archivos temporales
+.DS_Store
+Thumbs.db

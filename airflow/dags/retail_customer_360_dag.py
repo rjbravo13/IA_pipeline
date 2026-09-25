@@ -72,17 +72,11 @@ with DAG(
         ),
     )
 
-    build_intermediate = BashOperator(
-        task_id="build_intermediate",
+    dbt_build = BashOperator(
+        task_id="dbt_build",
         bash_command=(
-            f"python {PROJECT_DIR}/database/build_intermediate.py"
-        ),
-    )
-
-    build_customer_360 = BashOperator(
-        task_id="build_customer_360",
-        bash_command=(
-            f"python {PROJECT_DIR}/database/build_customer_360.py"
+            f"cd {PROJECT_DIR}/dbt && "
+            "dbt build --profiles-dir ."
         ),
     )
 
@@ -112,8 +106,7 @@ with DAG(
         >> quality_checks
         >> init_database
         >> load_staging
-        >> build_intermediate
-        >> build_customer_360
+        >> dbt_build
         >> build_features
         >> train_model
     )
