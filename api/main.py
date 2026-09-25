@@ -7,10 +7,6 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine, text
 
 
-# ============================================================
-# CONFIGURACIÓN
-# ============================================================
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 MODEL_PATH = (
@@ -26,10 +22,6 @@ DATABASE_URL = (
 )
 
 
-# ============================================================
-# APLICACIÓN
-# ============================================================
-
 app = FastAPI(
     title="Retail Customer 360 API",
     description="API para consultar Customer 360 y predecir riesgo de clientes",
@@ -37,27 +29,13 @@ app = FastAPI(
 )
 
 
-# ============================================================
-# BASE DE DATOS
-# ============================================================
-
 engine = create_engine(DATABASE_URL)
-
-
-# ============================================================
-# MODELO ML
-# ============================================================
 
 try:
     model = joblib.load(MODEL_PATH)
 except Exception as e:
     model = None
     print(f"Error cargando el modelo: {e}")
-
-
-# ============================================================
-# MODELOS DE RESPUESTA
-# ============================================================
 
 class HealthResponse(BaseModel):
     status: str
@@ -70,22 +48,12 @@ class PredictionResponse(BaseModel):
     prediction: str
     risk_probability: float
 
-
-# ============================================================
-# HEALTH CHECK
-# ============================================================
-
 @app.get("/health", response_model=HealthResponse)
 def health():
     return {
         "status": "ok",
         "model_loaded": model is not None,
     }
-
-
-# ============================================================
-# PREDICCIÓN
-# ============================================================
 
 @app.get(
     "/predict/{customer_id}",

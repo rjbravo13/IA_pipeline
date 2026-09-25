@@ -78,10 +78,6 @@ def train_model():
 
     print(f"Registros: {len(df)}")
 
-    # ---------------------------------------------------------
-    # Configuración MLflow
-    # ---------------------------------------------------------
-
     mlflow.set_tracking_uri(
         "sqlite:///mlflow.db"
     )
@@ -89,10 +85,6 @@ def train_model():
     mlflow.set_experiment(
         "customer_risk_prediction"
     )
-
-    # ---------------------------------------------------------
-    # Features
-    # ---------------------------------------------------------
 
     feature_columns = [
         "city",
@@ -109,10 +101,6 @@ def train_model():
     X = df[feature_columns]
     y = df[target_column]
 
-    # ---------------------------------------------------------
-    # Train / Test
-    # ---------------------------------------------------------
-
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
@@ -123,10 +111,6 @@ def train_model():
 
     print(f"Train: {len(X_train)}")
     print(f"Test : {len(X_test)}")
-
-    # ---------------------------------------------------------
-    # Columnas
-    # ---------------------------------------------------------
 
     categorical_features = [
         "city",
@@ -140,10 +124,6 @@ def train_model():
         "average_ticket",
         "unique_products",
     ]
-
-    # ---------------------------------------------------------
-    # Preprocesamiento
-    # ---------------------------------------------------------
 
     preprocessor = ColumnTransformer(
         transformers=[
@@ -161,10 +141,6 @@ def train_model():
             ),
         ]
     )
-
-    # ---------------------------------------------------------
-    # Modelo
-    # ---------------------------------------------------------
 
     max_iter = 1000
 
@@ -184,10 +160,6 @@ def train_model():
         ]
     )
 
-    # ---------------------------------------------------------
-    # MLflow Run
-    # ---------------------------------------------------------
-
     with mlflow.start_run() as run:
 
         print("\nEntrenando modelo...")
@@ -197,15 +169,7 @@ def train_model():
             y_train,
         )
 
-        # -----------------------------------------------------
-        # Predicción
-        # -----------------------------------------------------
-
         y_pred = model.predict(X_test)
-
-        # -----------------------------------------------------
-        # Métricas
-        # -----------------------------------------------------
 
         accuracy = accuracy_score(
             y_test,
@@ -229,10 +193,6 @@ def train_model():
             y_pred,
             zero_division=0,
         )
-
-        # -----------------------------------------------------
-        # Parámetros
-        # -----------------------------------------------------
 
         mlflow.log_param(
             "model",
@@ -279,10 +239,6 @@ def train_model():
             target_column,
         )
 
-        # -----------------------------------------------------
-        # Métricas
-        # -----------------------------------------------------
-
         mlflow.log_metric(
             "accuracy",
             accuracy,
@@ -303,10 +259,6 @@ def train_model():
             f1,
         )
 
-        # -----------------------------------------------------
-        # Tags
-        # -----------------------------------------------------
-
         mlflow.set_tag(
             "project",
             "Retail Customer 360",
@@ -322,10 +274,6 @@ def train_model():
             "recency_days > 30",
         )
 
-        # -----------------------------------------------------
-        # Guardar modelo local
-        # -----------------------------------------------------
-
         MODEL_DIR.mkdir(
             parents=True,
             exist_ok=True,
@@ -335,10 +283,6 @@ def train_model():
             model,
             MODEL_FILE,
         )
-
-        # -----------------------------------------------------
-        # Registrar modelo en MLflow
-        # -----------------------------------------------------
 
         mlflow.sklearn.log_model(
             model,

@@ -27,7 +27,6 @@ def process_products():
     print("Procesando productos...")
     print(f"Entrada: {input_file}")
 
-    # Leer JSON RAW
     with open(input_file, "r", encoding="utf-8") as file:
         data = json.load(file)
 
@@ -38,17 +37,14 @@ def process_products():
 
     print(f"Registros RAW: {len(products)}")
 
-    # Convertir JSON a DataFrame
     df = pd.DataFrame(products)
 
-    # Adaptar nombres al modelo del proyecto
     df = df.rename(
         columns={
             "id": "product_id"
         }
     )
 
-    # Seleccionar únicamente las columnas necesarias
     df = df[
         [
             "product_id",
@@ -59,7 +55,6 @@ def process_products():
         ]
     ]
 
-    # Tipos de datos
     df["product_id"] = pd.to_numeric(
         df["product_id"],
         errors="coerce"
@@ -88,18 +83,15 @@ def process_products():
         errors="coerce"
     )
 
-    # Eliminar productos duplicados
     df = df.drop_duplicates(
         subset=["product_id"]
     )
 
-    # Crear carpeta de salida
     OUTPUT_DIR.mkdir(
         parents=True,
         exist_ok=True
     )
 
-    # Guardar resultado
     df.to_csv(
         OUTPUT_FILE,
         index=False

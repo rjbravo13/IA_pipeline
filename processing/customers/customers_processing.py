@@ -13,12 +13,10 @@ def process_customers():
     print("Procesando clientes...")
     print(f"Entrada: {INPUT_FILE}")
 
-    # Leer RAW
     df = pd.read_csv(INPUT_FILE)
 
     print(f"Registros RAW: {len(df)}")
 
-    # Seleccionar columnas del modelo
     df = df[
         [
             "customer_id",
@@ -28,7 +26,6 @@ def process_customers():
         ]
     ]
 
-    # Tipos de datos
     df["customer_id"] = df["customer_id"].astype("string")
     df["signup_date"] = pd.to_datetime(
         df["signup_date"],
@@ -37,13 +34,10 @@ def process_customers():
     df["city"] = df["city"].astype("string").str.strip()
     df["segment"] = df["segment"].astype("string").str.strip()
 
-    # Eliminar duplicados
     df = df.drop_duplicates(subset=["customer_id"])
 
-    # Crear carpeta de salida
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Guardar datos procesados
     df.to_csv(OUTPUT_FILE, index=False)
 
     print(f"Registros procesados: {len(df)}")

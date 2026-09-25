@@ -198,10 +198,9 @@ IA_pipeline/
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── dags/
-│       └── retail_customer_360.py
+│       └── retail_customer_360_dag.py
 │
 ├── ml/
-│   ├── train_model.py
 │   ├── train_model_mlflow.py
 │   └── reports/
 │
@@ -662,6 +661,7 @@ ml/reports/metrics.json
 ```
 
 El modelo generado localmente se mantiene fuera del repositorio mediante `.gitignore`.
+Los datos generados, archivos RAW y modelos no se almacenan en Git. Se generan durante la ejecución del pipeline. Por ello, después de clonar el repositorio se debe ejecutar el pipeline mediante Airflow para generar los datos y el modelo necesarios para las etapas posteriores.
 
 ---
 

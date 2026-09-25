@@ -72,19 +72,11 @@ def add_result(results, rule, passed, blocking=False):
 def run_quality_checks():
     print("Iniciando controles de calidad...\n")
 
-    # ---------------------------------------------------------
-    # Leer datos procesados
-    # ---------------------------------------------------------
-
     customers = pd.read_csv(CUSTOMERS_FILE)
     sales = pd.read_csv(SALES_FILE)
     products = pd.read_csv(PRODUCTS_FILE)
 
     results = []
-
-    # ---------------------------------------------------------
-    # CUSTOMER
-    # ---------------------------------------------------------
 
     add_result(
         results,
@@ -99,10 +91,6 @@ def run_quality_checks():
         check_unique(customers, "customer_id"),
         blocking=True,
     )
-
-    # ---------------------------------------------------------
-    # PRODUCTS
-    # ---------------------------------------------------------
 
     add_result(
         results,
@@ -124,10 +112,6 @@ def run_quality_checks():
         check_greater_equal_zero(products, "price"),
         blocking=False,
     )
-
-    # ---------------------------------------------------------
-    # SALES
-    # ---------------------------------------------------------
 
     add_result(
         results,
@@ -171,10 +155,6 @@ def run_quality_checks():
         blocking=True,
     )
 
-    # ---------------------------------------------------------
-    # INTEGRIDAD REFERENCIAL
-    # ---------------------------------------------------------
-
     add_result(
         results,
         "sales.customer_id existe en customers",
@@ -199,20 +179,12 @@ def run_quality_checks():
         blocking=True,
     )
 
-    # ---------------------------------------------------------
-    # TOTAL DE VENTA
-    # ---------------------------------------------------------
-
     add_result(
         results,
         "sales.total_line consistente",
         check_total_line(sales),
         blocking=True,
     )
-
-    # ---------------------------------------------------------
-    # Resumen
-    # ---------------------------------------------------------
 
     passed = sum(
         1 for result in results
@@ -241,10 +213,6 @@ def run_quality_checks():
         "results": results,
     }
 
-    # ---------------------------------------------------------
-    # Guardar evidencia
-    # ---------------------------------------------------------
-
     REPORTS_DIR.mkdir(
         parents=True,
         exist_ok=True,
@@ -261,10 +229,6 @@ def run_quality_checks():
             ensure_ascii=False,
             indent=2,
         )
-
-    # ---------------------------------------------------------
-    # Mostrar resultados
-    # ---------------------------------------------------------
 
     print("RESULTADOS DE CALIDAD")
     print("=" * 60)
@@ -286,10 +250,6 @@ def run_quality_checks():
 
     print(f"\nReporte generado:")
     print(REPORT_FILE)
-
-    # ---------------------------------------------------------
-    # Regla bloqueante
-    # ---------------------------------------------------------
 
     if blocking_failures:
         print(

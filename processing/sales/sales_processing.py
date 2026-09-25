@@ -13,12 +13,10 @@ def process_sales():
     print("Procesando ventas...")
     print(f"Entrada: {INPUT_FILE}")
 
-    # Leer RAW
     df = pd.read_csv(INPUT_FILE)
 
     print(f"Registros RAW: {len(df)}")
 
-    # Seleccionar columnas del modelo
     df = df[
         [
             "sale_id",
@@ -30,7 +28,6 @@ def process_sales():
         ]
     ]
 
-    # Tipos de datos
     df["sale_id"] = df["sale_id"].astype("string")
     df["customer_id"] = df["customer_id"].astype("string")
 
@@ -54,18 +51,14 @@ def process_sales():
         errors="coerce"
     )
 
-    # Eliminar duplicados de venta
     df = df.drop_duplicates(subset=["sale_id"])
 
-    # Calcular total de la línea
     df["total_line"] = (
         df["quantity"] * df["unit_price"]
     )
 
-    # Crear carpeta de salida
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Guardar datos procesados
     df.to_csv(OUTPUT_FILE, index=False)
 
     print(f"Registros procesados: {len(df)}")
