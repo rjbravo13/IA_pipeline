@@ -3,7 +3,7 @@ numpy
 requests
 sqlalchemy
 psycopg2-binary
-scikit-learn
+scikit-learn==1.5.1
 joblib
 mlflow
 dbt-core==1.12.5
