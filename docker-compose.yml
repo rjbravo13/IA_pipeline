@@ -58,7 +58,7 @@ services:
       --firstname Admin
       --lastname User
       --role Admin
-      --email admin@retail.local || true &&
+      --email ${AIRFLOW_ADMIN_EMAIL} || true &&
       airflow api-server
       "
 
@@ -112,3 +112,4 @@ services:
 volumes:
 
   postgres_data:
+
