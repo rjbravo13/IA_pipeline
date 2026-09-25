@@ -273,12 +273,21 @@ Ejemplo conceptual:
 
 ```text
 POSTGRES_DB=retaildb
+
 POSTGRES_USER=retail_user
+
 POSTGRES_PASSWORD=********
+
 DB_HOST=postgres
 ```
 
 El archivo `.env` no debe subirse al repositorio.
+
+Para configurar el entorno local después de clonar el repositorio:
+
+```powershell
+Copy-Item .env.example .env
+```
 
 ---
 
