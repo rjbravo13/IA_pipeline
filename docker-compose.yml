@@ -82,7 +82,6 @@ services:
       AIRFLOW__API_AUTH__JWT_SECRET: ${AIRFLOW_SECRET_KEY}
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/plugins:/opt/airflow/plugins
       - ./:/opt/airflow/project
     command: airflow scheduler
 
@@ -107,7 +106,6 @@ services:
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
       - ./:/opt/airflow/project
     command: airflow dag-processor
 
