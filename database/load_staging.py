@@ -1,17 +1,35 @@
 from pathlib import Path
-import psycopg2
-import pandas as pd
 import os
 
+import pandas as pd
+import psycopg2
+
+
 BASE_DIR = Path(__file__).resolve().parents[1]
+
 
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "port": 5432,
-    "database": "retaildb",
-    "user": "retail_user",
-    "password": "retail_password",
+    "database": os.getenv("POSTGRES_DB"),
+    "user": os.getenv("POSTGRES_USER"),
+    "password": os.getenv("POSTGRES_PASSWORD"),
 }
+
+
+required_env = [
+    "POSTGRES_DB",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+]
+
+missing_env = [var for var in required_env if not os.getenv(var)]
+
+if missing_env:
+    raise RuntimeError(
+        "Faltan variables de entorno requeridas: "
+        + ", ".join(missing_env)
+    )
 
 
 CUSTOMERS_FILE = (
@@ -25,6 +43,7 @@ SALES_FILE = (
 PRODUCTS_FILE = (
     BASE_DIR / "processing" / "products" / "products_clean.csv"
 )
+
 
 def truncate_tables(connection):
     cursor = connection.cursor()
@@ -42,11 +61,17 @@ def truncate_tables(connection):
 
     print("Tablas staging limpiadas correctamente")
 
+
 def load_dataframe(connection, df, table_name):
     cursor = connection.cursor()
 
-    columns = ", ".join(f'"{column}"' for column in df.columns)
-    placeholders = ", ".join(["%s"] * len(df.columns))
+    columns = ", ".join(
+        f'"{column}"' for column in df.columns
+    )
+
+    placeholders = ", ".join(
+        ["%s"] * len(df.columns)
+    )
 
     query = f"""
         INSERT INTO retail_staging.{table_name}
@@ -60,7 +85,9 @@ def load_dataframe(connection, df, table_name):
     connection.commit()
     cursor.close()
 
-    print(f"{table_name}: {len(df)} registros cargados")
+    print(
+        f"{table_name}: {len(df)} registros cargados"
+    )
 
 
 def create_tables(connection):

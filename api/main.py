@@ -1,13 +1,16 @@
 from pathlib import Path
+import os
 
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import create_engine, text
+from sqlalchemy.engine import URL
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 MODEL_PATH = (
     BASE_DIR
@@ -16,9 +19,36 @@ MODEL_PATH = (
     / "customer_risk_model_mlflow.joblib"
 )
 
-DATABASE_URL = (
-    "postgresql+psycopg2://"
-    "retail_user:retail_password@localhost:5432/retaildb"
+
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = int(os.getenv("DB_PORT", "5432"))
+DB_NAME = os.getenv("POSTGRES_DB")
+DB_USER = os.getenv("POSTGRES_USER")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+
+
+required_env = [
+    "POSTGRES_DB",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+]
+
+missing_env = [var for var in required_env if not os.getenv(var)]
+
+if missing_env:
+    raise RuntimeError(
+        "Faltan variables de entorno requeridas: "
+        + ", ".join(missing_env)
+    )
+
+
+DATABASE_URL = URL.create(
+    drivername="postgresql+psycopg2",
+    username=DB_USER,
+    password=DB_PASSWORD,
+    host=DB_HOST,
+    port=DB_PORT,
+    database=DB_NAME,
 )
 
 
@@ -31,11 +61,13 @@ app = FastAPI(
 
 engine = create_engine(DATABASE_URL)
 
+
 try:
     model = joblib.load(MODEL_PATH)
 except Exception as e:
     model = None
     print(f"Error cargando el modelo: {e}")
+
 
 class HealthResponse(BaseModel):
     status: str
@@ -48,12 +80,17 @@ class PredictionResponse(BaseModel):
     prediction: str
     risk_probability: float
 
-@app.get("/health", response_model=HealthResponse)
+
+@app.get(
+    "/health",
+    response_model=HealthResponse,
+)
 def health():
     return {
         "status": "ok",
         "model_loaded": model is not None,
     }
+
 
 @app.get(
     "/predict/{customer_id}",
@@ -112,7 +149,9 @@ def predict(customer_id: str):
         "unique_products": int(row.unique_products),
     }])
 
-    prediction = int(model.predict(features)[0])
+    prediction = int(
+        model.predict(features)[0]
+    )
 
     probability = float(
         model.predict_proba(features)[0][1]

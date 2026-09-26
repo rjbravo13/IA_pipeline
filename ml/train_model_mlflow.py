@@ -1,12 +1,12 @@
 from pathlib import Path
 import json
+import os
 
 import joblib
 import mlflow
 import mlflow.sklearn
 import pandas as pd
 import psycopg2
-import os
 
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import (
@@ -32,13 +32,31 @@ MODEL_FILE = (
     MODEL_DIR / "customer_risk_model_mlflow.joblib"
 )
 
+MLFLOW_DB = BASE_DIR / "mlflow.db"
+
+
 DB_CONFIG = {
-    "host": os.getenv("DB_HOST", "localhost"),
+    "host": os.getenv("DB_HOST") or "localhost",
     "port": 5432,
-    "database": "retaildb",
-    "user": "retail_user",
-    "password": "retail_password",
+    "database": os.getenv("POSTGRES_DB"),
+    "user": os.getenv("POSTGRES_USER"),
+    "password": os.getenv("POSTGRES_PASSWORD"),
 }
+
+
+required_env = [
+    "POSTGRES_DB",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+]
+
+missing_env = [var for var in required_env if not os.getenv(var)]
+
+if missing_env:
+    raise RuntimeError(
+        "Faltan variables de entorno requeridas: "
+        + ", ".join(missing_env)
+    )
 
 
 def load_features():
@@ -79,7 +97,7 @@ def train_model():
     print(f"Registros: {len(df)}")
 
     mlflow.set_tracking_uri(
-        "sqlite:///mlflow.db"
+        f"sqlite:///{MLFLOW_DB.as_posix()}"
     )
 
     mlflow.set_experiment(
@@ -289,7 +307,7 @@ def train_model():
             name="customer_risk_model",
             skops_trusted_types=[
                 "sklearn.compose._column_transformer._RemainderColsList"
-            ]
+            ],
         )
 
         print("\nMÉTRICAS")
