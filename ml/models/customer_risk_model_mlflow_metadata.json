@@ -1,0 +1,16 @@
+{
+  "run_id": "b18c2762728b480ab5f913299881bd70",
+  "model_version": "b18c2762728b480ab5f913299881bd70",
+  "training_timestamp": "2026-10-02T22:55:48.243765+00:00",
+  "dataset_version": "customer_features_100_records",
+  "feature_columns": [
+    "city",
+    "segment",
+    "total_purchases",
+    "total_quantity",
+    "total_spent",
+    "average_ticket",
+    "unique_products"
+  ],
+  "target": "at_risk"
+}

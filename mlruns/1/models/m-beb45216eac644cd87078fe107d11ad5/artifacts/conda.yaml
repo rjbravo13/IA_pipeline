@@ -1,0 +1,17 @@
+channels:
+- conda-forge
+dependencies:
+- python=3.12.7
+- pip<=24.2
+- pip:
+  - mlflow==3.16.1
+  - jaraco-classes==3.2.1
+  - jaraco-collections==5.1.0
+  - lz4==4.3.2
+  - numpy==1.26.4
+  - psutil==5.9.0
+  - pytest==7.4.4
+  - scikit-learn==1.5.1
+  - scipy==1.13.1
+  - skops==0.15.0
+name: mlflow-env
