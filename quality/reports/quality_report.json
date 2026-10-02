@@ -1,0 +1,80 @@
+{
+  "summary": {
+    "total_rules": 14,
+    "passed": 14,
+    "failed": 0,
+    "blocking_failures": 0
+  },
+  "results": [
+    {
+      "rule": "customers.customer_id no nulo",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "customers.customer_id único",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "products.product_id no nulo",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "products.product_id único",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "products.price >= 0",
+      "status": "PASS",
+      "blocking": false
+    },
+    {
+      "rule": "sales.sale_id único",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "sales.customer_id no nulo",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "sales.product_id no nulo",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "sales.quantity > 0",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "sales.unit_price >= 0",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "sales.timestamp válido",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "sales.customer_id existe en customers",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "sales.product_id existe en products",
+      "status": "PASS",
+      "blocking": true
+    },
+    {
+      "rule": "sales.total_line consistente",
+      "status": "PASS",
+      "blocking": true
+    }
+  ]
+}

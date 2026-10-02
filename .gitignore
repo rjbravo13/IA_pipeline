@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Entornos virtuales
+.venv/
+venv/
+
+# Variables de entorno
+.env
+
+# Airflow
+airflow/logs/
+airflow/__pycache__/
+
+# Logs
+logs/
+*.log
+
+# Bases de datos locales
+*.db
+
+# MLflow
+mlruns/
+
+# Datos generados
+raw/
+
+# Modelos generados
+ml/models/
+ml/reports/
+
+# dbt
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml
+
+# IDE
+.idea/
+.vscode/
+
+# Modelos antiguos
+models/*.pkl
+
+# Archivos temporales
+.DS_Store
+Thumbs.db
+# Pytest
+.pytest_cache/
